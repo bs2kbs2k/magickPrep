@@ -39,7 +39,7 @@
 
       // calling image magick with one source image, and command to rotate & resize image
       const files = [{ 'name': 'srcFile.png', 'content': sourceBytes },{ 'name': 'palette.png', 'content': paletteBytes }];
-      const command = ["convert", "srcFile.png", "-remap", "palette.png", "out.png"];
+      const command = ["convert", "srcFile.png", "-dither", "FloydSteinberg", "-remap", "palette.png", "out.png"];
       let processedFiles = await Magick.Call(files, command);
 
       // response can be multiple files (example split)
