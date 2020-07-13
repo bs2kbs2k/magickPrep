@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <title>magickPrep</title>
+</head>
+
+<body>
+  <h1>magickPrep: Automagikally Prepares Image for use in <a href="https://pixelanarchy.online">pixelanarchy.online</a></h1>
+  Based on
+  <a href="https://github.com/knicknic/WASM-ImageMagick">https://github.com/knicknic/WASM-ImageMagick</a>
+  <br>
+  <p>Source image: </p>
+  <input type="file" id="srcImage" accept="image/*">
+  <br>
+  <button id="prep">Start!</button>
+  <br>
+  <p>Prepped image: </p>
+  <img id="preppedImage">
+
+  <script type='module'>
+    //import the library to talk to imagemagick
+    import * as Magick from 'https://knicknic.github.io/wasm-imagemagick/magickApi.js';
+
+    // various html elements
+    let rotatedImage = document.getElementById('preppedImage');
+
+    // Fetch the image to rotate, and call image magick
+    let DoMagickCall = async function () {
+      let arrayBuffer = await document.getElementById('preppedImage').files[0].arrayBuffer();
+      let sourceBytes = new Uint8Array(arrayBuffer);
+      
+      let fetchedPaletteImage = await fetch('https://bs2kbs2k.github.io/magickPrep/palette.png');
+      let arrayBufferPalette = await fetchedPaletteImage.arrayBuffer();
+      let paletteBytes = new Uint8Array(arrayBufferPalette);
+
+      // calling image magick with one source image, and command to rotate & resize image
+      const files = [{ 'name': 'srcFile.png', 'content': sourceBytes },{ 'name': 'palette.png', 'content': paletteBytes }];
+      const command = ["convert", "srcFile.png", "-dither", "None", "-remap", "palette.png", "out.png"];
+      let processedFiles = await Magick.Call(files, command);
+
+      // response can be multiple files (example split)
+      // here we know we just have one
+      let firstOutputImage = processedFiles[0]
+      rotatedImage.src = URL.createObjectURL(firstOutputImage['blob'])
+      console.log("created image " + firstOutputImage['name'])
+    };
+    document.getElementById('prep').addEventListener('click',function(e){DoMagickCall();})
+  </script>
+</body>
+
+</html>
