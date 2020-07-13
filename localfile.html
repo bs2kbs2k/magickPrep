@@ -28,7 +28,7 @@
 
     // Fetch the image to rotate, and call image magick
     let DoMagickCall = async function () {
-      let arrayBuffer = await document.getElementById('preppedImage').files[0].arrayBuffer();
+      let arrayBuffer = await document.getElementById('srcImage').files[0].arrayBuffer();
       let sourceBytes = new Uint8Array(arrayBuffer);
       
       let fetchedPaletteImage = await fetch('https://bs2kbs2k.github.io/magickPrep/palette.png');
