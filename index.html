@@ -32,7 +32,7 @@
       let arrayBuffer = await fetchedSourceImage.arrayBuffer();
       let sourceBytes = new Uint8Array(arrayBuffer);
       
-      let fetchedPaletteImage = await fetch('palette.png');
+      let fetchedPaletteImage = await fetch('https://bs2kbs2k.github.io/magickPrep/palette.png');
       let arrayBufferPalette = await fetchedPaletteImage.arrayBuffer();
       let paletteBytes = new Uint8Array(arrayBufferPalette);
 
